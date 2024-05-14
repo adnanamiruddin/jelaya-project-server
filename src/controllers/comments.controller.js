@@ -49,8 +49,7 @@ export const getCommentsByBlogId = async (req, res) => {
       comments.push(comment);
     }
 
-    // Sort comments by createdAt
-    comments.sort((a, b) => b.createdAt - a.createdAt);
+    comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     responseHandler.ok(res, comments);
   } catch (error) {
