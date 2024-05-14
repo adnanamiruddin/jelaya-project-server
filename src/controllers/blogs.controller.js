@@ -3,6 +3,7 @@ import {
   BlogContentTextTable,
   BlogsTable,
   CommentBlogTable,
+  UsersTable,
 } from "../config/firebase-config.js";
 import Blog from "../models/Blog.js";
 import responseHandler from "../handlers/response.handler.js";
@@ -18,6 +19,7 @@ import {
 } from "firebase/firestore";
 import BlogContentText from "../models/BlogContentText.js";
 import BlogContentImage from "../models/BlogContentImage.js";
+import User from "../models/User.js";
 
 export const createBlog = async (req, res) => {
   try {
@@ -74,9 +76,15 @@ export const getAllBlogs = async (req, res) => {
   try {
     const blogs = [];
     const blogsSnap = await getDocs(BlogsTable);
-    blogsSnap.forEach((blogDoc) => {
-      blogs.push(Blog.toFormattedObject(blogDoc));
-    });
+
+    for (const blogDoc of blogsSnap.docs) {
+      const blog = Blog.toFormattedObject(blogDoc);
+
+      const userSnap = await getDoc(doc(UsersTable, blog.userId));
+      blog.user = User.getProfile(userSnap);
+
+      blogs.push(blog);
+    }
 
     responseHandler.ok(res, blogs);
   } catch (error) {
