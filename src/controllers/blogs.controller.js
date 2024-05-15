@@ -163,23 +163,23 @@ export const deleteBlog = async (req, res) => {
     const blogContentTextSnap = await getDocs(
       query(BlogContentTextTable, where("blogId", "==", blogId))
     );
-    blogContentTextSnap.forEach(async (doc) => {
+    for (const doc of blogContentTextSnap.docs) {
       await deleteDoc(doc.ref);
-    });
+    }
 
     const blogContentImageSnap = await getDocs(
       query(BlogContentImageTable, where("blogId", "==", blogId))
     );
-    blogContentImageSnap.forEach(async (doc) => {
+    for (const doc of blogContentImageSnap.docs) {
       await deleteDoc(doc.ref);
-    });
+    }
 
     const commentsSnap = await getDocs(
       query(CommentBlogTable, where("blogId", "==", blogId))
     );
-    commentsSnap.forEach(async (doc) => {
+    for (const doc of commentsSnap.docs) {
       await deleteDoc(doc.ref);
-    });
+    }
 
     await deleteDoc(blogRef);
 
