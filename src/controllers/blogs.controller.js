@@ -62,9 +62,10 @@ export const getUserBlogs = async (req, res) => {
       query(BlogsTable, where("userId", "==", id))
     );
     blogsSnap.forEach((blogDoc) => {
-      const blog = Blog.toFormattedObject(blogDoc);
-      blogs.push(blog);
+      blogs.push(Blog.toFormattedObject(blogDoc));
     });
+
+    blogs.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
     responseHandler.ok(res, blogs);
   } catch (error) {
