@@ -95,6 +95,8 @@ export const getUserComments = async (req, res) => {
       comments.push(comment);
     }
 
+    comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     responseHandler.ok(res, comments);
   } catch (error) {
     responseHandler.error(res);
